@@ -1,0 +1,50 @@
+{
+  "name": "app-name-teste",
+  "productName": "hello-world",
+  "version": "1.0.0",
+  "description": "Electron app, testing a windows installer",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "build-installer": "electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.app",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./resources/icon.png",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "uninstallDisplayName": "app-name-teste",
+      "license": "license.txt",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "extraFiles": [
+      {
+        "from": "./teste.txt",
+        "to": "./test_folder/teste.txt"
+      }
+    ],
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^20.1.0",
+    "electron-builder": "^23.3.3",
+    "electron-packager": "^16.0.0",
+    "electron-wix-msi": "^4.0.0"
+  },
+  "dependencies": {
+    "electron-updater": "^5.2.1"
+  }
+}
