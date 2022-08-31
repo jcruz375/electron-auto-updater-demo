@@ -40,8 +40,10 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     message: releaseNotes,
     detail: "A new version is being downloaded"
   };
-  dialog.showMessageBox(dialogOpts, (response) => {
 
+  console.log("DIALOG_OPTS_updt-available", dialogOpts);
+  dialog.showMessageBox(dialogOpts, (response) => {
+    
   })
 })
 
@@ -53,6 +55,9 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     message: releaseNotes,
     detail: "A new version has been downloaded. Restart the aplication to aply the updates..."
   };
+
+  console.log("DIALOG_OPTS_updt-DOWNLOAD", dialogOpts);
+
   dialog.showMessageBox(dialogOpts).then(returnValue => {
     if (returnValue === 0) autoUpdater.quitAndInstall();
   })
