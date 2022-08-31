@@ -8,17 +8,6 @@
   </head>
   <body>
     <h1>Hello World!</h1>
-    <p id="version"></p>
-
-    <script>
-      const { ipcRenderer } = require('electron');
-      const version = document.getElementById('version');
-
-      ipcRenderer.send('app_version');
-      ipcRenderer.on('app_version', (event, arg) => {
-        ipcRenderer.removeAllListeners('app_version');
-        version.innerText = `Current version running: ${args.version}`
-      })
-    </script>
+    <p id="version">current version running: 1.0.2</p>
   </body>
 </html>
