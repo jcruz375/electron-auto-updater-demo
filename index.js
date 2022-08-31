@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
@@ -26,6 +26,10 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 });
+
+ipcMain.on("app_version", (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+})
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
   const dialogOpts = {

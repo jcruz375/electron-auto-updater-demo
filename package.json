@@ -1,13 +1,13 @@
 {
   "name": "app-name-teste",
   "productName": "hello-world",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Electron app, testing a windows installer",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
-    "build-installer": "electron-builder"
+    "build": "electron-builder build --win --publish never",
+    "deploy": "set GH_TOKEN=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 && electron-builder build --win --publish always"
   },
   "build": {
     "appId": "com.electron.app",
@@ -16,7 +16,10 @@
         "nsis"
       ],
       "icon": "./resources/icon.png",
-      "requestedExecutionLevel": "requireAdministrator"
+      "requestedExecutionLevel": "requireAdministrator",
+      "publish": [
+        "github"
+      ]
     },
     "nsis": {
       "uninstallDisplayName": "app-name-teste",

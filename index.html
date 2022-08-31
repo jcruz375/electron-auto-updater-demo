@@ -8,8 +8,17 @@
   </head>
   <body>
     <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <p id="version"></p>
+
+    <script>
+      const { ipcRenderer } = require('electron');
+      const version = document.getElementById('version');
+
+      ipcRenderer.send('app_version');
+      ipcRenderer.on('app_version', (event, arg) => {
+        ipcRenderer.removeAllListeners('app_version');
+        version.innerText = `Current version running: ${args.version}`
+      })
+    </script>
   </body>
 </html>
