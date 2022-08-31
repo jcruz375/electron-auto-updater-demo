@@ -3,6 +3,7 @@ const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
 const createWindow = () => {
+  const appVersion = app.getVersion();
   const mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
@@ -28,8 +29,8 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on("app_version", (event) => {
-  event.sender.send('app_version', { version: app.getVersion() });
-})
+  event.sender.send('app_version', { version: appVersion });
+});
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
   const dialogOpts = {
