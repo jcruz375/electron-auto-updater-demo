@@ -60,19 +60,17 @@ autoUpdater.on('update-available', (info) => {
 
 // console.log("TESTE::::", teste)
 
-autoUpdater.on('update-not-available', () => {
+autoUpdater.on('update-not-available', (info) => {
   dialog.showMessageBox({
     title: 'No Updates',
-    message: 'Current version is up-to-date.'
+    message: `Current version is up-to-date. ${info.releaseNotes}`
   })
-  updater.enabled = true
-  updater = null
 })
 
-autoUpdater.on('update-downloaded', () => {
+autoUpdater.on('update-downloaded', (info) => {
   dialog.showMessageBox({
     title: 'Atualização instalada!',
-    message: 'Updates downloaded, application will be quit for update...'
+    message: `Updates downloaded, application will be quit for update... ${info.releaseNotes}`
   }).then(() => {
     setImmediate(() => autoUpdater.quitAndInstall())
   })
