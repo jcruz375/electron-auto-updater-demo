@@ -20,7 +20,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 
   autoUpdater.on("update-available", (info) => {
-    window.localStorage.setItem('update-info', JSON.stringify(info));
+    localStorage.setItem('update-info', JSON.stringify(info));
   })
 }
 
@@ -44,23 +44,35 @@ autoUpdater.on('error', (error) => {
 });
 
 autoUpdater.on('update-available', (info) => {
-  teste = info;
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Atualização disponível',
-    message: `Existem atualizações disponíveis! ${JSON.stringify(info)}`,
-    buttons: ['Sim', 'Não']
-  }).then((buttonIndex) => {
-    if (buttonIndex === 0) {
-      dialog.showMessageBox({
-        type: 'info',
-        title: 'Atualização INICIOU',
-        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info)}`,
-        buttons: ['OK']
-      })
+
+  if (info.tag === 'required-update') {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'SISTEMA REQUER ATUALIZAÇÃO',
+      message: `O SEU SISTEMA ESTÁ DESATUALIZADO, NECESSÁRIO ATUALIZAR ${JSON.stringify(info)}`,
+      buttons: ['OK!!!']
+    }).then((response) => {
       autoUpdater.downloadUpdate();
-    }
-  });
+    });
+  } else {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Atualização disponível',
+      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
+      buttons: ['Sim', 'Não']
+    }).then((buttonIndex) => {
+      if (buttonIndex === 0) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: 'Atualização INICIOU',
+          message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info)}`,
+          buttons: ['OK']
+        })
+        autoUpdater.downloadUpdate();
+      }
+    });
+  }
+
 });
 
 // console.log("TESTE::::", teste)
