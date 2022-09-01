@@ -45,7 +45,7 @@ autoUpdater.on('error', (error) => {
 
 autoUpdater.on('update-available', (info) => {
 
-  if (info.tag === 'required-update') {
+  if (info.tag.includes('requires-update')) {
     dialog.showMessageBox({
       type: 'info',
       title: 'SISTEMA REQUER ATUALIZAÇÃO',
