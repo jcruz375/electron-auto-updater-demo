@@ -5,7 +5,6 @@ const path = require('path')
 autoUpdater.autoDownload = false;
 
 const createWindow = () => {
-  const appCurrentVersion = app.getVersion();
   const mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
@@ -44,8 +43,9 @@ autoUpdater.on('error', (error) => {
 });
 
 autoUpdater.on('update-available', (info) => {
-
-  const releaseNotes = JSON.parse(info.releaseNotes);
+  const infoRNString = JSON.stringify(info.releaseNotes);
+  const releaseNotes = JSON.parse(infoRNString);
+  const appCurrentVersion = app.getVersion();
 
   const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
 
