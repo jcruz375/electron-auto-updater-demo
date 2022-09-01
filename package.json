@@ -1,13 +1,13 @@
 {
   "name": "app-name-teste",
   "productName": "hello-world",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Electron app, testing a windows installer",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder build --win --publish never",
-    "deploy": "set GH_TOKEN=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 && electron-builder build --win --publish always"
+    "deploy": "set GH_TOKEN=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 && electron-builder build --win --publish always"
   },
   "build": {
     "appId": "com.electron.app",
