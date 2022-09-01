@@ -2,6 +2,9 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
+let updater
+autoUpdater.autoDownload = false
+
 const createWindow = () => {
   const appVersion = app.getVersion();
   const mainWindow = new BrowserWindow({
@@ -32,33 +35,41 @@ ipcMain.on("app_version", (event) => {
   event.sender.send('app_version', { version: appVersion });
 });
 
-autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: "info",
-    buttons: ["OK"],
-    title: "Update Available",
-    message: releaseNotes,
-    detail: "A new version is being downloaded"
-  };
+autoUpdater.on('error', (error) => {
+  dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString());
+});
 
-  console.log("DIALOG_OPTS_updt-available", dialogOpts);
-  dialog.showMessageBox(dialogOpts, (response) => {
-    
+autoUpdater.on('update-available', (info) => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Atualização disponível',
+    message: `Existem atualizações disponíveis! ${info}`,
+    buttons: ['Sim', 'Não']
+  }).then((buttonIndex) => {
+    if (buttonIndex === 0) {
+      autoUpdater.downloadUpdate();
+    }
+    else {
+      updater.enabled = true;
+      updater = null;
+    };
+  });
+});
+
+autoUpdater.on('update-not-available', () => {
+  dialog.showMessageBox({
+    title: 'No Updates',
+    message: 'Current version is up-to-date.'
   })
+  updater.enabled = true
+  updater = null
 })
 
-autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: "info",
-    buttons: ["Restart", "Later"],
-    title: "Aplication Update",
-    message: releaseNotes,
-    detail: "A new version has been downloaded. Restart the aplication to aply the updates..."
-  };
-
-  console.log("DIALOG_OPTS_updt-DOWNLOAD", dialogOpts);
-
-  dialog.showMessageBox(dialogOpts).then(returnValue => {
-    if (returnValue === 0) autoUpdater.quitAndInstall();
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox({
+    title: 'Atualização instalada!',
+    message: 'Updates downloaded, application will be quit for update...'
+  }).then(() => {
+    setImmediate(() => autoUpdater.quitAndInstall())
   })
 })
