@@ -47,6 +47,12 @@ autoUpdater.on('update-available', (info) => {
     buttons: ['Sim', 'Não']
   }).then((buttonIndex) => {
     if (buttonIndex === 0) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: 'Atualização INICIOU',
+        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${info.releaseNotes}`,
+        buttons: ['OK']
+      })
       autoUpdater.downloadUpdate();
     }
   });
