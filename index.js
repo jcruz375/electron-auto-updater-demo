@@ -36,11 +36,14 @@ autoUpdater.on('error', (error) => {
   dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString());
 });
 
+var teste;
+
 autoUpdater.on('update-available', (info) => {
+  teste = info;
   dialog.showMessageBox({
     type: 'info',
     title: 'Atualização disponível',
-    message: `Existem atualizações disponíveis! ${info}`,
+    message: `Existem atualizações disponíveis! ${info.releaseNotes}`,
     buttons: ['Sim', 'Não']
   }).then((buttonIndex) => {
     if (buttonIndex === 0) {
@@ -48,6 +51,8 @@ autoUpdater.on('update-available', (info) => {
     }
   });
 });
+
+// console.log("TESTE::::", teste)
 
 autoUpdater.on('update-not-available', () => {
   dialog.showMessageBox({
