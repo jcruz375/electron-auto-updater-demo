@@ -53,7 +53,7 @@ autoUpdater.on('update-available', (info) => {
     dialog.showMessageBox({
       type: 'info',
       title: 'SISTEMA REQUER ATUALIZAÇÃO',
-      message: `O SEU SISTEMA ESTÁ DESATUALIZADO, NECESSÁRIO ATUALIZAR ${JSON.stringify(info)}`,
+      message: `O SEU SISTEMA ESTÁ DESATUALIZADO, NECESSÁRIO ATUALIZAR ${JSON.stringify(info.releaseNotes)}`,
       buttons: ['OK!!!']
     }).then((response) => {
       autoUpdater.downloadUpdate();
@@ -62,14 +62,14 @@ autoUpdater.on('update-available', (info) => {
     dialog.showMessageBox({
       type: 'info',
       title: 'Atualização disponível',
-      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
+      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info.releaseNotes)}`,
       buttons: ['Sim', 'Não']
     }).then((buttonIndex) => {
       if (buttonIndex === 0) {
         dialog.showMessageBox({
           type: 'info',
           title: 'Atualização INICIOU',
-          message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info)}`,
+          message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info.releaseNotes)}`,
           buttons: ['OK']
         })
         autoUpdater.downloadUpdate();
@@ -84,14 +84,14 @@ autoUpdater.on('update-available', (info) => {
 autoUpdater.on('update-not-available', (info) => {
   dialog.showMessageBox({
     title: 'No Updates',
-    message: `Current version is up-to-date. ${JSON.stringify(info)}`
+    message: `Current version is up-to-date. ${JSON.stringify(info.releaseNotes)}`
   })
 })
 
 autoUpdater.on('update-downloaded', (info) => {
   dialog.showMessageBox({
     title: 'Atualização instalada!',
-    message: `Updates downloaded, application will be quit for update... ${JSON.stringify(info)}`
+    message: `Updates downloaded, application will be quit for update... ${JSON.stringify(info.releaseNotes)}`
   }).then(() => {
     setImmediate(() => autoUpdater.quitAndInstall())
   })
