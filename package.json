@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder build --win --publish never",
-    "deploy": "set GH_TOKEN=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 && electron-builder build --win --publish always"
+    "deploy": "set GH_TOKEN=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 && electron-builder build --win --publish always"
   },
   "build": {
     "appId": "com.electron.app",

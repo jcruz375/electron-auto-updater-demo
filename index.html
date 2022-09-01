@@ -17,7 +17,7 @@
   <script>
     const { autoUpdater } = require('electron-updater');
 
-    autoUpdater.on('update-available', (info) => {
+    autoUpdater.on('update-not-available', (info) => {
       console.log("TESTEEE:::",info);
     });
 

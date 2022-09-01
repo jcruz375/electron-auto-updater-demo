@@ -5,7 +5,7 @@ const path = require('path')
 autoUpdater.autoDownload = false;
 
 const createWindow = () => {
-  const appVersion = app.getVersion();
+  const appCurrentVersion = app.getVersion();
   const mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
@@ -45,7 +45,11 @@ autoUpdater.on('error', (error) => {
 
 autoUpdater.on('update-available', (info) => {
 
-  if (info.tag.includes('requires-update')) {
+  const releaseNotes = JSON.parse(info.releaseNotes);
+
+  const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
+
+  if (isRequiredUpdate.length > 0) {
     dialog.showMessageBox({
       type: 'info',
       title: 'SISTEMA REQUER ATUALIZAÇÃO',
