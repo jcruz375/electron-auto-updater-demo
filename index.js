@@ -2,9 +2,6 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
-let updater
-autoUpdater.autoDownload = false
-
 const createWindow = () => {
   const appVersion = app.getVersion();
   const mainWindow = new BrowserWindow({
@@ -49,10 +46,6 @@ autoUpdater.on('update-available', (info) => {
     if (buttonIndex === 0) {
       autoUpdater.downloadUpdate();
     }
-    else {
-      updater.enabled = true;
-      updater = null;
-    };
   });
 });
 
