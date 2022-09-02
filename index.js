@@ -43,39 +43,28 @@ autoUpdater.on('error', (error) => {
 });
 
 autoUpdater.on('update-available', (info) => {
-  const infoRNString = JSON.stringify(info.releaseNotes);
-  const releaseNotes = JSON.parse(infoRNString);
-  const appCurrentVersion = app.getVersion();
+  // const infoRNString = JSON.stringify(info.releaseNotes);
+  // const releaseNotes = JSON.parse(infoRNString);
+  // const appCurrentVersion = app.getVersion();
 
-  const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
-
-  if (isRequiredUpdate.length > 0) {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'SISTEMA REQUER ATUALIZAÇÃO',
-      message: `O SEU SISTEMA ESTÁ DESATUALIZADO, NECESSÁRIO ATUALIZAR ${JSON.stringify(info.releaseNotes)}`,
-      buttons: ['OK!!!']
-    }).then((response) => {
+  // const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
+  
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Atualização disponível',
+    message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info.releaseNotes)}`,
+    buttons: ['Sim', 'Não']
+  }).then((buttonIndex) => {
+    if (buttonIndex === 0) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: 'Atualização INICIOU',
+        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info.releaseNotes)}`,
+        buttons: ['OK']
+      })
       autoUpdater.downloadUpdate();
-    });
-  } else {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Atualização disponível',
-      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info.releaseNotes)}`,
-      buttons: ['Sim', 'Não']
-    }).then((buttonIndex) => {
-      if (buttonIndex === 0) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: 'Atualização INICIOU',
-          message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info.releaseNotes)}`,
-          buttons: ['OK']
-        })
-        autoUpdater.downloadUpdate();
-      }
-    });
-  }
+    }
+  });
 
 });
 
