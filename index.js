@@ -48,7 +48,7 @@ autoUpdater.on('update-available', (info) => {
   // const appCurrentVersion = app.getVersion();
 
   // const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
-  
+
   dialog.showMessageBox({
     type: 'info',
     title: 'Atualização disponível',
@@ -59,7 +59,7 @@ autoUpdater.on('update-available', (info) => {
       dialog.showMessageBox({
         type: 'info',
         title: 'Atualização INICIOU',
-        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info.releaseNotes)}`,
+        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info)}`,
         buttons: ['OK']
       })
       autoUpdater.downloadUpdate();
@@ -73,14 +73,14 @@ autoUpdater.on('update-available', (info) => {
 autoUpdater.on('update-not-available', (info) => {
   dialog.showMessageBox({
     title: 'No Updates',
-    message: `Current version is up-to-date. ${JSON.stringify(info.releaseNotes)}`
+    message: `Current version is up-to-date. ${JSON.stringify(info)}`
   })
 })
 
 autoUpdater.on('update-downloaded', (info) => {
   dialog.showMessageBox({
     title: 'Atualização instalada!',
-    message: `Updates downloaded, application will be quit for update... ${JSON.stringify(info.releaseNotes)}`
+    message: `Updates downloaded, application will be quit for update... ${JSON.stringify(info)}`
   }).then(() => {
     setImmediate(() => autoUpdater.quitAndInstall())
   })
