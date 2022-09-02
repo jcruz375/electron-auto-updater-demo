@@ -45,7 +45,7 @@ autoUpdater.on('update-available', (info) => {
 
   // const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
 
-  let isRequiredUpdate = info.stagingPercentage.includes('required');
+  let isRequiredUpdate = info.tag.includes('required');
 
   if (isRequiredUpdate) {
     dialog.showMessageBox({
