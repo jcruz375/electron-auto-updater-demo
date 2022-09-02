@@ -40,7 +40,13 @@ autoUpdater.on('update-available', (info) => {
       message: `Existe uma atualização ***OBRIGATÓRIA*** ${JSON.stringify(info)}`,
       buttons: ['OKAY!!!!']
     }).then((buttonIndex) => {
-      autoUpdater.downloadUpdate();
+      autoUpdater.downloadUpdate().then((response) => {
+        dialog.showMessageBox({
+          type: 'info',
+          title: 'Atualização começu a ser baixada',
+          message: 'atualização baixada'
+        })
+      })
     });
   } else {
     dialog.showMessageBox({
@@ -50,7 +56,13 @@ autoUpdater.on('update-available', (info) => {
       buttons: ['Sim', 'Não']
     }).then((buttonIndex) => {
       if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate();
+        autoUpdater.downloadUpdate().then((response) => {
+          dialog.showMessageBox({
+            type: 'info',
+            title: 'Atualização começu a ser baixada',
+            message: 'atualização baixada'
+          })
+        })
       }
     });
   }
