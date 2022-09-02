@@ -48,7 +48,7 @@ autoUpdater.on('update-available', (info) => {
   dialog.showMessageBox({
     type: 'info',
     title: 'Atualização disponível',
-    message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info.releaseNotes)}`,
+    message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
     buttons: ['Sim', 'Não']
   }).then((buttonIndex) => {
     if (buttonIndex === 0) {
