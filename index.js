@@ -17,10 +17,6 @@ const createWindow = () => {
 
   autoUpdater.checkForUpdates();
   mainWindow.webContents.openDevTools();
-
-  autoUpdater.on("update-available", (info) => {
-    localStorage.setItem('update-info', JSON.stringify(info));
-  })
 }
 
 app.whenReady().then(() => {
