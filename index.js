@@ -2,7 +2,6 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
-autoUpdater.autoDownload = false;
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -12,9 +11,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
+  
   mainWindow.loadFile('index.html');
-
+  
+  autoUpdater.autoDownload = false;
   autoUpdater.checkForUpdates();
   mainWindow.webContents.openDevTools();
 }
@@ -30,21 +30,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 });
 
-ipcMain.on("app_version", (event) => {
-  event.sender.send('app_version', { version: appVersion });
-});
-
-autoUpdater.on('error', (error) => {
-  dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString());
-});
-
 autoUpdater.on('update-available', (info) => {
-  // const infoRNString = JSON.stringify(info.releaseNotes);
-  // const releaseNotes = JSON.parse(infoRNString);
-  // const appCurrentVersion = app.getVersion();
-
-  // const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
-
   let isRequiredUpdate = info.tag.includes('required');
 
   if (isRequiredUpdate) {
@@ -54,9 +40,7 @@ autoUpdater.on('update-available', (info) => {
       message: `Existe uma atualização ***OBRIGATÓRIA*** ${JSON.stringify(info)}`,
       buttons: ['OKAY!!!!']
     }).then((buttonIndex) => {
-      if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate();
-      }
+      autoUpdater.downloadUpdate();
     });
   } else {
     dialog.showMessageBox({
