@@ -45,22 +45,31 @@ autoUpdater.on('update-available', (info) => {
 
   // const isRequiredUpdate = releaseNotes.versions.requiresUpdate.filter(version => version === appCurrentVersion)
 
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Atualização disponível',
-    message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
-    buttons: ['Sim', 'Não']
-  }).then((buttonIndex) => {
-    if (buttonIndex === 0) {
-      dialog.showMessageBox({
-        type: 'info',
-        title: 'Atualização INICIOU',
-        message: `A ATUALIZAÇÃO COMEÇOU A SER BAIXADA! ${JSON.stringify(info)}`,
-        buttons: ['OK']
-      })
-      autoUpdater.downloadUpdate();
-    }
-  });
+  let isRequiredUpdate = info.stagingPercentage.includes('required');
+
+  if (isRequiredUpdate) {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Atualização obrigatória disponível',
+      message: `Existe uma atualização ***OBRIGATÓRIA*** ${JSON.stringify(info)}`,
+      buttons: ['OKAY!!!!']
+    }).then((buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
+  } else {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Atualização disponível',
+      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
+      buttons: ['Sim', 'Não']
+    }).then((buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
+  }
 
 });
 
