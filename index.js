@@ -30,7 +30,15 @@ app.on('window-all-closed', () => {
 });
 
 autoUpdater.on('update-available', (info) => {
-  autoUpdater.downloadUpdate();
+  dialog.showMessageBox({
+    type: 'info',
+    title: "existe uma nova atualização do sistema!",
+    message: "Nova atualização está sendo baixada.",
+    buttons: ["ok"]
+  }).then((response) => {
+    alert('Atualização sendo baixada')
+    // autoUpdater.downloadUpdate();
+  })
 })
 
 autoUpdater.on('update-downloaded', (info) => {
@@ -40,7 +48,7 @@ autoUpdater.on('update-downloaded', (info) => {
     dialog.showMessageBox({
       type: 'info',
       title: 'Atualização obrigatória disponível',
-      message: `Existe uma atualização ***OBRIGATÓRIA*** ${JSON.stringify(info)}`,
+      message: `Existe uma atualização ***OBRIGATÓRIA*** clique em ok para instalar a atualização`,
       buttons: ['OKAY!!!!']
     }).then((response) => {
       autoUpdater.quitAndInstall();
@@ -49,11 +57,11 @@ autoUpdater.on('update-downloaded', (info) => {
     dialog.showMessageBox({
       type: 'info',
       title: 'Atualização disponível',
-      message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
+      message: `Existem atualizações disponíveis! Deseja atualizar??`,
       buttons: ['Instalar agora', 'Depois']
     }).then((buttonIndex) => {
       if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate();
+        autoUpdater.quitAndInstall();
       }
     });
   }
