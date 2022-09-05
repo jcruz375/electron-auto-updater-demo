@@ -1,7 +1,7 @@
 {
   "name": "app-name-teste",
   "productName": "hello-world",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Electron app, testing a windows installer",
   "main": "index.js",
   "scripts": {
