@@ -14,7 +14,6 @@ const createWindow = () => {
   
   mainWindow.loadFile('index.html');
   
-  autoUpdater.autoDownload = false;
   autoUpdater.checkForUpdates();
   mainWindow.webContents.openDevTools();
 }
@@ -31,6 +30,10 @@ app.on('window-all-closed', () => {
 });
 
 autoUpdater.on('update-available', (info) => {
+  autoUpdater.downloadUpdate();
+})
+
+autoUpdater.on('update-downloaded', (info) => {
   let isRequiredUpdate = info.tag.includes('required');
 
   if (isRequiredUpdate) {
@@ -39,50 +42,27 @@ autoUpdater.on('update-available', (info) => {
       title: 'Atualização obrigatória disponível',
       message: `Existe uma atualização ***OBRIGATÓRIA*** ${JSON.stringify(info)}`,
       buttons: ['OKAY!!!!']
-    }).then((buttonIndex) => {
-      autoUpdater.downloadUpdate().then((response) => {
-        dialog.showMessageBox({
-          type: 'info',
-          title: 'Atualização começu a ser baixada',
-          message: 'atualização baixada'
-        })
-      })
+    }).then((response) => {
+      autoUpdater.quitAndInstall();
     });
   } else {
     dialog.showMessageBox({
       type: 'info',
       title: 'Atualização disponível',
       message: `Existem atualizações disponíveis! Deseja atualizar?? ${JSON.stringify(info)}`,
-      buttons: ['Sim', 'Não']
+      buttons: ['Instalar agora', 'Depois']
     }).then((buttonIndex) => {
       if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate().then((response) => {
-          dialog.showMessageBox({
-            type: 'info',
-            title: 'Atualização começu a ser baixada',
-            message: 'atualização baixada'
-          })
-        })
+        autoUpdater.downloadUpdate();
       }
     });
   }
 
 });
 
-// console.log("TESTE::::", teste)
-
 autoUpdater.on('update-not-available', (info) => {
   dialog.showMessageBox({
     title: 'No Updates',
     message: `Current version is up-to-date. ${JSON.stringify(info)}`
   })
-})
-
-autoUpdater.on('update-downloaded', (info) => {
-  dialog.showMessageBox({
-    title: 'Atualização instalada!',
-    message: `Updates downloaded, application will be quit for update... ${JSON.stringify(info)}`
-  }).then(() => {
-    setImmediate(() => autoUpdater.quitAndInstall())
-  })
-})
+});
