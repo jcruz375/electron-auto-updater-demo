@@ -1,76 +1,52 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron')
-const { autoUpdater } = require('electron-updater');
-const path = require('path')
+const { app, BrowserWindow, ipcMain } = require('electron');
 
+let mainWindow;
 
-const createWindow = () => {
-  const mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
+function createWindow () {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-  
+      nodeIntegration: true,
+    },
+  });
   mainWindow.loadFile('index.html');
-  
-  autoUpdater.checkForUpdates();
-  mainWindow.webContents.openDevTools();
+  mainWindow.on('closed', function () {
+    mainWindow = null;
+  });
+
+  mainWindow.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 }
 
-app.whenReady().then(() => {
-  createWindow()
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
+app.on('ready', () => {
+  createWindow();
 });
 
-autoUpdater.on('update-available', (info) => {
-  dialog.showMessageBox({
-    type: 'info',
-    title: "existe uma nova atualização do sistema!",
-    message: "Nova atualização está sendo baixada.",
-    buttons: ["ok"]
-  }).then((response) => {
-    alert('Atualização sendo baixada')
-    // autoUpdater.downloadUpdate();
-  })
-})
-
-autoUpdater.on('update-downloaded', (info) => {
-  let isRequiredUpdate = info.tag.includes('required');
-
-  if (isRequiredUpdate) {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Atualização obrigatória disponível',
-      message: `Existe uma atualização ***OBRIGATÓRIA*** clique em ok para instalar a atualização`,
-      buttons: ['OKAY!!!!']
-    }).then((response) => {
-      autoUpdater.quitAndInstall();
-    });
-  } else {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Atualização disponível',
-      message: `Existem atualizações disponíveis! Deseja atualizar??`,
-      buttons: ['Instalar agora', 'Depois']
-    }).then((buttonIndex) => {
-      if (buttonIndex === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
-
 });
 
-autoUpdater.on('update-not-available', (info) => {
-  dialog.showMessageBox({
-    title: 'No Updates',
-    message: `Current version is up-to-date. ${JSON.stringify(info)}`
-  })
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
+
+ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+});
+
+autoUpdater.on('update-available', () => {
+  mainWindow.webContents.send('update_available');
+});
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});
+
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
 });
